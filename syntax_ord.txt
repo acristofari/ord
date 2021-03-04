@@ -1,0 +1,52 @@
+Syntax:
+[X,Y,F,N_F,IT,T_ELAP,FLAG] = ORD(OBJ,A,I0)
+[X,Y,F,N_F,IT,T_ELAP,FLAG] = ORD(OBJ,A,I0,OPTS)
+
+Input arguments:
+- OBJ (required) is the objective function, passed as a function handle;
+- A (required) is the n-by-m matrix of atoms, where each column is an
+  n-dimensional atom;
+- I0 (required) is the index of the atom (i.e., of the column of A) used as
+  starting point;
+- OPTS (optional) is a structure with the following algorithm parameters:
+    EPS_OPT is the stopping tolerance for the stationarity condition, i.e.,
+            the threshold on the stepsizes scaled by the maximum norm of
+            the direction
+            (default value = 1e-4)
+    MAX_N_F is the maximum number of objective function evaluations
+            (default value = 100*(n+1))
+    MAX_IT is the maximum number of iterations
+            (default value = Inf, i.e., it is not used)
+    F_STOP is a target objective value to stop the algorithm
+            (devalut value = -Inf, i.e., it is not used)
+    MAX_TIME is the maximum cpu time in seconds, measured at the end of
+             every iteration
+            (devalut value = Inf, i.e., it is not used)
+    N_INITIAL_ATOMS is the number of atoms used in the first iteration
+            (default value = m, i.e., all atoms),
+    SET_INITIAL_ATOMS is a vector with the indices of the atoms to use in
+                      the first iteration, if it is empty the atoms are
+                      chosen randomly
+                      (default value = empty vector)
+    USE_MODEL can be a logical value indicating whether or not the simplex
+              gradient must be used, or can be a numerical value indicating
+              the maximum dimension of the reduced problem for which the
+              simplex gradient must be used
+              (default value = true)
+    VERBOSITY is a logical to print or not iterations details
+              (default value = true)
+
+Output arguments:
+- X is the final solution found by the algorithm;
+- Y is the vector of coefficients to express X as a convex combination of
+  atoms (i.e., x = A*y);
+- F is the objective value at X;
+- N_F is the number of objective function evaluations;
+- IT is the number of iterations;
+- T_ELAP is the cpu time in seconds;
+- FLAG is an integer describing the exit condition:
+    0 the stationarity condition is satisfied with the desired tolerance,
+    1 if the maximum number of function evalations is reached,
+    2 if the maximum number of iterations is reached,
+    3 if the target objective value is obtained,
+    4 if the maximum cpu time is exceeded.
