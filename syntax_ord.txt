@@ -23,7 +23,7 @@ Input arguments:
              every iteration
             (devalut value = Inf, i.e., it is not used)
     N_INITIAL_ATOMS is the number of atoms used in the first iteration
-            (default value = m, i.e., all atoms),
+            (default value = m, i.e., all atoms)
     SET_INITIAL_ATOMS is a vector with the indices of the atoms to use in
                       the first iteration, if it is empty the atoms are
                       chosen randomly
