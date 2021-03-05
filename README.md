@@ -14,7 +14,7 @@ ORD uses an inner approximation approach that, at each iteration, approximately 
 by the DF-SIMPLEX algorithm, with a growing precision, over the convex hull of a suitably chosen subset of atoms,
 using proper rules to add and remove atoms.
 
-ORD can be also used to solve black-box adversarial attacks (see below).
+ORD can also be used for black-box adversarial attacks (see below).
 
 ## Reference paper
 
