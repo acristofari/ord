@@ -84,9 +84,9 @@ In particular, the _maximum allowable l1-norm attack_ can be formulated as
     s.t. ||x||_1 <= eps
 
 where _f_ is a suitably chosen attack loss function, _x0_ is a correctly classified sample,
-_||x||\_1_ is the _l_1-norm of _x_ and _eps_ is a  positive parameter.
+_||x||\_1_ is the *l*1-norm of _x_ and _eps_ is a  positive parameter.
 Note that _f_ is a black-box function when the internal configuration of the classifier is unknown.
-Moreover, the feasible set can be expressed as the convex combination of the vertices of the _l_1-ball.
+Moreover, the feasible set can be expressed as the convex combination of the vertices of the *l*1-ball.
 So, ORD can be used to solve this class of problems.
 
 When considering image classification, usually there is an additional constraint of the form
