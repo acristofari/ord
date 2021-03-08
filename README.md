@@ -76,7 +76,7 @@ such as l1-norm constraint.
 ## An application: black-box adversarial attacks
 
 As an example of application of ORD, consider black-box adversarial attacks.
-In this problems, the goal is to perturb the inputs of a given classifier to generate samples that lead to
+In these problems, the goal is to perturb the inputs of a given classifier to generate samples that lead to
 misclassification.
 In particular, the _maximum allowable l1-norm attack_ can be formulated as
 
