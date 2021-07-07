@@ -18,9 +18,8 @@ ORD can also be used for black-box adversarial attacks (see below).
 
 ## Reference paper
 
-A. Cristofari, F. Rinaldi (2021). _A derivative-free method for structured
-optimization problems._ SIAM Journal on Optimization, to appear. Pre-print
-available at <https://arxiv.org/abs/2005.05224>.
+[A. Cristofari, F. Rinaldi (2021). _A Derivative-Free Method for Structured Optimization Problems._
+SIAM Journal on Optimization, 31(2), 1079-1107] (https://epubs.siam.org/doi/abs/10.1137/20M1337417).
 
 ## Authors
 

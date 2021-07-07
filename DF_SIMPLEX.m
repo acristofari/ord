@@ -14,9 +14,8 @@
 %
 % Reference paper:
 %
-% A. Cristofari, F. Rinaldi (2021). A derivative-free method for structured
-% optimization problems. SIAM Journal on Optimization, to appear. Pre-print
-% available at https://arxiv.org/abs/2005.05224.
+% A. Cristofari, F. Rinaldi (2021). A Derivative-Free Method for Structured
+% Optimization Problems. SIAM Journal on Optimization, 31(2), 1079-1107.
 %
 % -------------------------------------------------------------------------
 %
@@ -25,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% March 4th, 2021
+% July 7th, 2021
 %
 % Licensing:
 % This file is part of ORD.
@@ -175,7 +174,7 @@ function [x,y,f,n_f,it,t_elap,flag,sampling] = DF_SIMPLEX(obj,A,y,opts)
         fprintf('%s%i%s%.4e\n','it = ',0,', f = ',f);
     end
     
-    % Search directions will be normalized
+    % search directions will be normalized
     
     % line search parameters
     if (~is_alpha_ini_given)
@@ -423,7 +422,7 @@ function [x,y,f,n_f,it,t_elap,flag,sampling] = DF_SIMPLEX(obj,A,y,opts)
             
             % expansion procedure
             %
-            % We now produce a new point and we start a new collection
+            % we now produce a new point and we start a new collection
             % of samples that first includes the point where we come from
             % and the point not accepted in the expansion (if any)
             if (expansion_i)
