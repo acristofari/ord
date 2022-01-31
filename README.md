@@ -6,7 +6,7 @@ optimization problems of the following form:
          min f(x)
     s.t. x in conv{a_1,...,a_m}
 
-where _f(x)_ is a (black-box) continuously differentiable function and
+where _f(x)_ is a black-box function and
 _conv{a\_1,...,a\_m}_ is the convex hull of some given vectors _a\_1,...,a\_m,_
 called _atoms_.
 
