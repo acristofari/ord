@@ -93,4 +93,4 @@ So, ORD can be used to solve this class of problems.
 
 When considering image classification, usually there is an additional constraint of the form
 _0 <= x0 + x <= 1_, which can be removed by applying a proper variable transformation.
-Further details can be found in the reference paper (Cristofari, Rinaldi, 2021) and in the references therein.
+Further details can be found in the reference paper [(Cristofari, Rinaldi, 2021)](https://epubs.siam.org/doi/abs/10.1137/20M1337417) and in the references therein.
