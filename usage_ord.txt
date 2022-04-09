@@ -16,9 +16,9 @@ Input arguments.
 -------------------------------------------------------------------------
 - OBJ (required) is the objective function, passed as a function handle;
 - A (required) is the n-by-m matrix of atoms, where each column is an
-  n-dimensional atom;
+               n-dimensional atom;
 - I0 (required) is the index of the atom (i.e., of the column of A) used as
-  starting point;
+                starting point;
 - OPTS (optional) is a structure with algorithm options (see below).
 -------------------------------------------------------------------------
 

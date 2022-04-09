@@ -20,7 +20,7 @@ Input arguments.
 -------------------------------------------------------------------------
 - OBJ (required) is the objective function, passed as a function handle;
 - A (required) is the n-by-m matrix of atoms, where each column is an
-  n-dimensional atom;
+               n-dimensional atom;
 - Y0 (required) is the vector of coefficients that express the starting
                 points as a convex combination of the atoms
                 (so, the coefficients must be non-negative and sum to 1,
