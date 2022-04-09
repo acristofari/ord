@@ -39,7 +39,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ORD. If not, see <http://www.gnu.org/licenses/>.
 
-Copyright 2021 Andrea Cristofari, Francesco Rinaldi.
+Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
 
 ## How to use ORD
 
