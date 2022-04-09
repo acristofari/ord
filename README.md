@@ -59,7 +59,7 @@ Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
 3. See the file `main.m` for an example.
    To run the example, just call `main.m` in Matlab.
 
-   (File `main.m` also contains an example of how to call DF-SIMPLEX as standalone, see below).
+   File `main.m` also contains an example of how to call DF-SIMPLEX as standalone, see below.
 
 ## When using ORD and when using DF-SIMPLEX
 
