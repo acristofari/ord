@@ -1,0 +1,70 @@
+In this file, it is explained how to call ORD in Matlab.
+-------------------------------------------------------------------------
+
+
+Usage.
+-------------------------------------------------------------------------
+X = ord(OBJ,A,I0)
+X = ord(OBJ,A,I0,OPTS)
+[X,F] = ord(__)
+[X,F,ORD_INFO] = ord(__)
+[X,F,ORD_INFO] = ord(__)
+-------------------------------------------------------------------------
+
+
+Input arguments.
+-------------------------------------------------------------------------
+- OBJ (required) is the objective function, passed as a function handle;
+- A (required) is the n-by-m matrix of atoms, where each column is an
+  n-dimensional atom;
+- I0 (required) is the index of the atom (i.e., of the column of A) used as
+  starting point;
+- OPTS (optional) is a structure with algorithm options (see below).
+-------------------------------------------------------------------------
+
+
+Output arguments.
+-------------------------------------------------------------------------
+- X is the final solution found by the algorithm,
+- F is the objective value at X,
+- ORD_INFO is a structure with the following fields:
+    'y' is the vector of coefficients to express X as a convex
+        combination of atoms (i.e., X = A*ORD_INFO.y);
+    'n_f' is the number of objective function evaluations;
+    'it' is the number of iterations;
+    'flag' is an integer describing the exit condition:
+           0 the stationarity condition is satisfied with the desired tolerance,
+           1 if the maximum number of function evalations is reached,
+           2 if the maximum number of iterations is reached,
+           3 if the target objective value is obtained.
+-------------------------------------------------------------------------
+
+
+Options.
+-------------------------------------------------------------------------
+To set algorithm options, use OPTS (it is one of the input arguments of 'ord', see above).
+OPTS is a structure having (some of) the following fields:
+- 'eps_opt' is the stopping tolerance for the stationarity condition, i.e.,
+            the threshold on the stepsizes scaled by the maximum norm of
+            the direction
+            (default value = 1e-4);
+- 'max_n_f' is the maximum number of objective function evaluations
+            (default value = 100*(n+1));
+- 'max_it' is the maximum number of iterations
+           (default value = Inf, i.e., it is not used);
+- 'min_f' is a target objective value to stop the algorithm
+          (devalut value = -Inf, i.e., it is not used);
+- 'n_initial_atoms' is the number of atoms used in the first iteration
+                    (default value = m, i.e., all atoms);
+- 'set_initial_atoms' is a vector with the indices of the atoms to use in
+                      the first iteration, if it is empty the atoms are
+                      chosen randomly
+                     (default value = empty vector);
+- 'use_simplex_grad' can be either a logical indicating whether or not the simplex
+                     gradient must be used, or can be a numerical value indicating
+                     the maximum dimension of the reduced problem for which the simplex
+                     gradient can be used
+                     (default value = true);
+- 'verbosity' is a logical to print or not iterations details
+              (default value = true).
+-------------------------------------------------------------------------

@@ -6,9 +6,9 @@
 %                                 min f(x)
 %                            s.t. x in conv{a_1,...,a_m}
 %
-% where f(x) is a (black-box) continuously differentiable function and
-% conv{a_1,...,a_m} is the convex hull of some given vectors a_1,...,a_m,
-% called atoms.
+% where f(x) is a black-box function (assumed to be continuously
+% differentiable) and conv{a_1,...,a_m} is the convex hull of some given
+% vectors a_1,...,a_m, called atoms.
 %
 % -------------------------------------------------------------------------
 %
@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% July 7th, 2021
+% April 9th, 2022
 %
 % Licensing:
 % This file is part of ORD.
@@ -39,15 +39,16 @@
 % You should have received a copy of the GNU General Public License
 % along with ORD. If not, see <http://www.gnu.org/licenses/>.
 %
-% Copyright 2021 Andrea Cristofari, Francesco Rinaldi.
+% Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
 %
 % -------------------------------------------------------------------------
 
 clear all, clc;
+
 rng(1);
 
-% In this file, we first show how to call ORD to solve a user-defined problem.
-% Then, we also show how to call DF-SIMPLEX as standalone.
+% In this file, it is first shown how to call ORD to solve a user-defined problem
+% Then, it is shown how to call DF-SIMPLEX as standalone.
 
 % (1) Define an objective function
 %--------------------------------------------------------------------------
@@ -70,11 +71,11 @@ i0 = randi(m); % index of the atom to use as starting point
 %--------------------------------------------------------------------------
 
 % (4) call ORD
-[x_ord,y_ord,f_ord,n_f_ord,it_ord,t_elap_ord,flag_ord] = ORD(obj,A,i0);
+[x_ord,f_ord,ord_info] = ord(obj,A,i0);
 
 %--------------------------------------------------------------------------
 % *** EXAMPLE OF HOW TO CHANGE ORD PARAMETERS ***
-% (see the file 'syntax_ord.txt' to know which parameters can be changed
+% (see the file 'usage_ord.txt' to know which parameters can be changed
 % and their default values)
 %
 % Instead of calling ORD by the above instruction, do the following:
@@ -86,7 +87,7 @@ i0 = randi(m); % index of the atom to use as starting point
 %
 % - pass the structure to ORD as fourth input argument, e.g.,
 %
-%     [x,y,f,n_f,it,t_elap,flag] = ORD(obj,A,i0,opts);
+%     [x_ord,f_ord,ord_info] = ord(obj,A,i0,opts);
 %--------------------------------------------------------------------------
 
 % write statistics to the screen
@@ -95,31 +96,28 @@ fprintf(['\n********************** FINAL RESULTS **********************' ...
          '\nf =  %-.4e'   ...
          '\nobjective function evaluations = %-i' ...
          '\niterations = %-i' ...
-         '\ncpu time (s) = %-.2e' ...
          '\nflag = %-i' ...
          '\n***********************************************************\n\n'], ...
-         f_ord,n_f_ord,it_ord,t_elap_ord,flag_ord);
+         f_ord,ord_info.n_f,ord_info.it,ord_info.flag);
 
 
 % To call DF-SIMPLEX as standalone, follow the same steps as above but call
 % DF-SIMPLEX instead of ORD (note that, in DF-SIMPLEX, the starting point
 % is passed as a vector of coefficients that express a convex combination
-% of the atoms, see the file 'syntax_df_simplex.txt' for further details).
+% of the atoms, see the file 'usage_df_simplex.txt' for further details).
 % Namely,
 
-[x_dfsimplex,y_dfsimplex,f_dfsimplex,n_f_dfsimplex,it_dfsimplex,t_elap_dfsimplex,flag_dfsimplex] = ...
-    DF_SIMPLEX(obj,A,double(1:m==i0)');
+[x_df_simplex,f_df_simplex,df_simplex_info] = df_simplex(obj,A,double(1:m==i0)');
 fprintf(['\n********************** FINAL RESULTS **********************' ...
          '\nAlgorithm: DF-SIMPLEX' ...
          '\nf =  %-.4e'   ...
          '\nobjective function evaluations = %-i' ...
          '\niterations = %-i' ...
-         '\ncpu time (s) = %-.2e' ...
          '\nflag = %-i' ...
          '\n***********************************************************\n\n'], ...
-         f_dfsimplex,n_f_dfsimplex,it_dfsimplex,t_elap_dfsimplex,flag_dfsimplex);
+         f_df_simplex,df_simplex_info.n_f,df_simplex_info.it,df_simplex_info.flag);
 
 % DF-SIMPLEX parameters can be changed as explained above for ORD, that is,
 % by passing as fourth input argument a structure with the parameters to be
-% changed (see the file 'syntax_df_simplex.txt' to know which parameters
+% changed (see the file 'usage_df_simplex.txt' to know which parameters
 % can be changed and their default values)

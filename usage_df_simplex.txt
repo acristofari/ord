@@ -1,0 +1,70 @@
+In this file, it is explained how to call DF-SIMPLEX in Matlab.
+-------------------------------------------------------------------------
+
+
+Usage.
+-------------------------------------------------------------------------
+X = df_simplex(OBJ,A,Y0)
+X = df_simplex(OBJ,A,Y0,OPTS)
+[X,F] = df_simplex(__)
+[X,F,DF_SIMPLEX_INFO] = df_simplex(__)
+
+Note that the 'df_simplex' function is defined in file 'df_simplex.m' with
+an additional output argument in last position. This is needed to pass the
+polling samples collected by DF-SIMPLEX to ORD, but it can be ignored if
+DF-SIMPLEX is called as standalone.
+-------------------------------------------------------------------------
+
+
+Input arguments.
+-------------------------------------------------------------------------
+- OBJ (required) is the objective function, passed as a function handle;
+- A (required) is the n-by-m matrix of atoms, where each column is an
+  n-dimensional atom;
+- Y0 (required) is the vector of coefficients that express the starting
+                points as a convex combination of the atoms
+                (so, the coefficients must be non-negative and sum to 1,
+                but such a check is not included in the code, in order to
+                avoid unwanted breaks due to numerical issues);
+- OPTS (optional) is a structure with algorithm options (see below).
+-------------------------------------------------------------------------
+
+
+Output arguments.
+-------------------------------------------------------------------------
+- X is the final solution found by the algorithm;
+- F is the objective value at X;
+- DF_SIMPLEX_INFO is a structure with the following fields:
+    'y' is the vector of coefficients to express X as a convex
+        combination of atoms (i.e., X = A*DF_SIMPLEX_INFO.y);
+    'n_f' is the number of objective function evaluations;
+    'it' is the number of iterations;
+    'flag' is an integer describing the exit condition:
+           0 the stationarity condition is satisfied with the desired tolerance,
+           1 if the maximum number of function evalations is reached,
+           2 if the maximum number of iterations is reached,
+           3 if the target objective value is obtained.
+-------------------------------------------------------------------------
+
+
+Options.
+-------------------------------------------------------------------------
+To set algorithm options, use OPTS (it is one of the input arguments of 'df_simplex', see above).
+OPTS is a structure having (some of) the following fields:
+- 'eps_opt' is the stopping tolerance for the stationarity condition, i.e.,
+            the threshold on the stepsizes on the normalized directions
+            (default value = 1e-4);
+- 'max_n_f' is the maximum number of objective function evaluations
+            (default value = 100*(n+1));
+- 'max_it' is the maximum number of iterations
+            (default value = Inf, i.e., it is not used);
+- 'min_f' is a target objective value to stop the algorithm
+          (devalut value = -Inf, i.e., it is not used);
+- 'f0' is the objective value at the starting point
+       (devalut value =  none, i.e., it will be computed);
+- 'alpha_ini' is the initial value of the stepsizes
+              (default value = max(5e-1,eps_opt) scaled by the maximum norm
+              of the directions);
+- 'verbosity' is a logical to print or not iterations details
+              (default value = true).
+-------------------------------------------------------------------------

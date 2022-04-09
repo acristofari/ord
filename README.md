@@ -46,17 +46,20 @@ Copyright 2021 Andrea Cristofari, Francesco Rinaldi.
 1. This directory should contain the following files:
 
     * `COPYING.txt`,
-    * `syntax_ord.txt`,
-    * `syntax_df_simplex.txt`,
-    * `README.md`,
-    * `ORD.m`,
+    * `df_simplex.m`.
     * `main.m`,
-    * `DF_SIMPLEX.m`.
+    * `ord.m`,
+    * `README.md`,
+    * `usage_ord.txt`,
+    * `usage_df_simplex.txt`,
 
-2. See the file `syntax_ord.txt` to know how to call ORD, change algorithm parameters and get output values.
+2. See the file `usage_ord.txt` to know how to call ORD in Matlab, change
+   algorithm parameters and get output values.
 
-3. See the file `main.m` for an example of how to call ORD to solve a user-defined problem
-  (this file also contains an example of how to call DF-SIMPLEX as standalone, see below).
+3. See the file `main.m` for an example.
+   To run the example, just call `main.m` in Matlab.
+
+   (File `main.m` also contains an example of how to call DF-SIMPLEX as standalone, see below).
 
 ## When using ORD and when using DF-SIMPLEX
 
@@ -64,7 +67,7 @@ DF-SIMPLEX is the algorithm used at each iteration of ORD to solve the reduced p
 employing sparse directions that contain positive generators of the tangent cone at the current iterate
 and a specific line search.
 So, DF-SIMPLEX can even be used as standalone to solve the same class of problems as ORD.
-To call DF-SIMPLEX as standalone, see the file `syntax_df_simplex.txt` and the example in the file `main.m`.
+To call DF-SIMPLEX as standalone, see the file `usage_df_simplex.txt` and the example in the file `main.m`.
 
 Since ORD and DF-SIMPLEX follow different approaches, in general terms we can say that
 ORD is preferable when the optimal solutions can be expressed as the convex combination
