@@ -46,12 +46,12 @@ Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
 1. This directory should contain the following files:
 
     * `COPYING.txt`,
-    * `df_simplex.m`.
+    * `df_simplex.m`,
     * `main.m`,
     * `ord.m`,
     * `README.md`,
     * `usage_ord.txt`,
-    * `usage_df_simplex.txt`,
+    * `usage_df_simplex.txt`.
 
 2. See the file `usage_ord.txt` to know how to call ORD in Matlab, change
    algorithm parameters and get output values.
