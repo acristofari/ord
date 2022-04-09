@@ -56,10 +56,9 @@ OPTS is a structure having (some of) the following fields:
           (devalut value = -Inf, i.e., it is not used);
 - 'n_initial_atoms' is the number of atoms used in the first iteration
                     (default value = m, i.e., all atoms);
-- 'set_initial_atoms' is a vector with the indices of the atoms to use in
-                      the first iteration, if it is empty the atoms are
-                      chosen randomly
-                     (default value = empty vector);
+- 'set_initial_atoms' is a vector with the indices of the atoms to use in the first
+                      iteration, if it is empty the atoms are chosen randomly
+                      (default value = empty vector);
 - 'use_simplex_grad' can be either a logical indicating whether or not the simplex
                      gradient must be used, or can be a numerical value indicating
                      the maximum dimension of the reduced problem for which the simplex
