@@ -86,11 +86,11 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     end
     
     % set options
-    f = [];
     eps_opt = 1e-4;
     max_n_f = 100*(size(A,1)+1);
     max_it = Inf;
     min_f = -Inf;
+    f = [];
     alpha_ini = max(5e-1,eps_opt);
     is_alpha_ini_given = false;
     verbosity = true;
