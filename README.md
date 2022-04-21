@@ -1,6 +1,6 @@
 # Structured Derivative-Free Optimization &amp; Black-Box Adversarial Attacks
 
-_Optimize, Refine & Drop_ (ORD) is a derivative-free solver for
+_Optimize, Refine &amp; Drop_ (ORD) is a derivative-free solver for
 optimization problems of the following form:
 
 <img src="https://latex.codecogs.com/svg.image?\min&space;f(x)&space;\\\text{s.t.&space;}&space;&space;x&space;\in&space;\text{conv}&space;\{a_1,\ldots,a_m\}">
