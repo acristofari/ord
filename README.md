@@ -3,18 +3,16 @@
 _Optimize, Refine & Drop_ (ORD) is a derivative-free solver for
 optimization problems of the following form:
 
-         min f(x)
-    s.t. x in conv{a_1,...,a_m}
+<img src="https://latex.codecogs.com/svg.image?\min&space;f(x)&space;\\\text{s.t.&space;}&space;&space;x&space;\in&space;\text{conv}&space;\{a_1,\ldots,a_m\}">
 
-where _f(x)_ is a black-box function and
-_conv{a\_1,...,a\_m}_ is the convex hull of some given vectors _a\_1,...,a\_m,_
+where f(x) is a _black-box function_ and conv{a<sub>1</sub>,...,a<sub>m</sub>} is the convex hull of some given vectors a<sub>1</sub>,...,a<sub>m</sub>
 called _atoms_.
 
-ORD uses an inner approximation approach that, at each iteration, approximately minimizes _f(x)_
+ORD uses an inner approximation approach that, at each iteration, approximately minimizes f(x)
 by the DF-SIMPLEX algorithm, with a growing precision, over the convex hull of a suitably chosen subset of atoms,
 using proper rules to add and remove atoms.
 
-ORD can also be used for black-box adversarial attacks (see below).
+ORD can also be used for _black-box adversarial attacks_ (see below).
 
 ## Reference paper
 
@@ -82,15 +80,14 @@ In these problems, the goal is to perturb the inputs of a given classifier to ge
 misclassification.
 In particular, the _maximum allowable l1-norm attack_ can be formulated as
 
-         min f(x0 + x)
-    s.t. ||x||_1 <= eps
+<img src="https://latex.codecogs.com/svg.image?\min&space;f(x_0&plus;x)&space;\\\text{s.t.&space;}&space;||x||_1&space;\le&space;\varepsilon">
 
-where _f_ is a suitably chosen attack loss function, _x0_ is a correctly classified sample,
-_||x||\_1_ is the *l*1-norm of _x_ and _eps_ is a  positive parameter.
-Note that _f_ is a black-box function when the internal configuration of the classifier is unknown.
-Moreover, the feasible set can be expressed as the convex combination of the vertices of the *l*1-ball.
-So, ORD can be used to solve this class of problems.
+where f is a suitably chosen attack loss function, x<sub>0</sub> is a vector representing a correctly classified sample,
+||x||<sub>1</sub> is the &ell;<sub>1</sub>-norm of x and &epsilon; is a positive parameter.
+Note that f is a black-box function when the internal configuration of the classifier is unknown.
+Since the feasible set can be expressed as the convex combination of the vertices of the &ell;<sub>1</sub>-ball,
+ORD can be used to solve this class of problems.
 
 When considering image classification, usually there is an additional constraint of the form
-_0 <= x0 + x <= 1_, which can be removed by applying a proper variable transformation.
+0 &le; x<sub>0</sub> + x &le; 1, which can be removed by applying a proper variable transformation.
 Further details can be found in the reference paper [(Cristofari, Rinaldi, 2021)](https://epubs.siam.org/doi/abs/10.1137/20M1337417) and in the references therein.

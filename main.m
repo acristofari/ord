@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 9th, 2022
+% April 21st, 2022
 %
 % Licensing:
 % This file is part of ORD.
@@ -65,9 +65,9 @@ m = 20*n; % number of atoms
 A = 1e1*rand(n,m); % matrix of atoms
 %--------------------------------------------------------------------------
 
-% (3) Choose an atom to use as starting point
+% (3) Choose an atom to be used as starting point
 %--------------------------------------------------------------------------
-i0 = randi(m); % index of the atom to use as starting point
+i0 = randi(m); % index of the atom to be used as starting point
 %--------------------------------------------------------------------------
 
 % (4) call ORD
@@ -103,8 +103,8 @@ fprintf(['\n********************** FINAL RESULTS **********************' ...
 
 % To call DF-SIMPLEX as standalone, follow the same steps as above but call
 % DF-SIMPLEX instead of ORD (note that, in DF-SIMPLEX, the starting point
-% is passed as a vector of coefficients that express a convex combination
-% of the atoms, see the file 'usage_df_simplex.txt' for further details).
+% is passed as a vector of coefficients expressing a convex combination of
+% the atoms, see the file 'usage_df_simplex.txt' for further details).
 % Namely,
 
 [x_df_simplex,f_df_simplex,df_simplex_info] = df_simplex(obj,A,double(1:m==i0)');

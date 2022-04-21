@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 9th, 2022
+% April 21st, 2022
 %
 % Licensing:
 % This file is part of ORD.
@@ -45,7 +45,7 @@
 
 
 function [x,f,ord_info] = ord(obj,A,i0,opts)
-        
+    
     if (nargin < 3)
         error('At least four inputs are required.');
     end
@@ -94,7 +94,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                 case 'max_n_f'
                     max_n_f = opts.max_n_f;
                     if (~isnumeric(max_n_f) || ~isreal(max_n_f) || ~isscalar(max_n_f) || max_n_f<=1e0)
-                       error('In the options, ''max_n_f'' must be a number  greater than or equal to 1.');
+                       error('In the options, ''max_n_f'' must be a number greater than or equal to 1.');
                     end
                     max_n_f = floor(max_n_f);
                 case 'max_it'
@@ -181,10 +181,10 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
     y(1) = 1e0;
     
     f = obj(A_k*y);
-    
-    it = 0;
     n_f = 1;
-        
+
+    it = 0;
+    
     f_sample_best = Inf;
     y_sample_best = sparse(n_atoms,1);
     
@@ -242,7 +242,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
         ord_info.flag = flag;
         return;
     end
-        
+    
     while (true)
         
         %==================================================================

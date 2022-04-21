@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 9th, 2022
+% April 21st, 2022
 %
 % Licensing:
 % This file is part of ORD.
@@ -45,7 +45,7 @@
 
 
 function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
-
+    
     % This file implements the DF-SIMPLEX algorithm, used at each iteration
     % of ORD to solve the reduced problems.
     % 
@@ -61,7 +61,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     %   sampling.v_d is the vector [i_1  ...  i_r]' such that d_h = sign(i_h)*(e_{i_h}-e_j), h = 1,...,r,
     %   sampling.j is the index j used to compute the polling directions d_1, ..., d_r,
     %   sampling.alpha is the vector [alpha_1  ...  alpha_r]',
-       
+    
     if (nargin < 3)
         error('At least four inputs are required.');
     end
@@ -109,7 +109,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 case 'max_n_f'
                     max_n_f = floor(opts.max_n_f);
                     if (~isnumeric(max_n_f) || ~isreal(max_n_f) || ~isscalar(max_n_f) || max_n_f<1e0)
-                       error('In the options, ''max_n_f'' must be a number  greater than or equal to 1.');
+                       error('In the options, ''max_n_f'' must be a number greater than or equal to 1.');
                     end
                 case 'max_it'
                     max_it = floor(opts.max_it);
@@ -142,7 +142,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             end
         end
     end
-        
+    
     n = size(A,2);
     
     b_sampling = zeros(2*n,1);
@@ -155,7 +155,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     
     tau = 9e-1;
     [~,j] = max(y);
-            
+    
     x = A*y;
     if (isempty(f))
         f = obj(x);
@@ -234,9 +234,9 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         df_simplex_info.flag = flag;
         return;
     end
-        
+    
     it = 1;
-        
+    
     while (true)
         
         if (n_f >= max_n_f)
