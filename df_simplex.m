@@ -457,7 +457,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                     end
                     if (~ind_sampling(ind_i_sampling)) % if this occurs, it means that the stepsize has been expanded,
                                                        % but the previous while loop ended because
-                                                       % alpha_trial=alpha_max_feas_i, n_f=n_f_max or flag=3
+                                                       % alpha_trial=alpha_max_feas_i, or n_f=n_f_max, or f_trial<=min_f
                         b_sampling(2*i-(~which_dir_i)) = f_prev - f_next;
                         alpha_sampling(2*i-(~which_dir_i)) = (1e0-delta)*alpha_trial;
                         ind_sampling = false(2*n,1);
