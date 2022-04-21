@@ -1,4 +1,4 @@
-# Structured Derivative-Free Optimization & Black-Box Adversarial Attacks
+# Structured Derivative-Free Optimization &amp; Black-Box Adversarial Attacks
 
 _Optimize, Refine & Drop_ (ORD) is a derivative-free solver for
 optimization problems of the following form:
@@ -72,14 +72,14 @@ Since ORD and DF-SIMPLEX follow different approaches, in general terms we can sa
 ORD is preferable when the optimal solutions can be expressed as the convex combination
 of just a few atoms. For example, this is the case when the number of atoms is much larger than
 the number of variables, or when the problem has a a particular structure that induces sparsity,
-such as l1-norm constraint.
+such as &ell;<sub>1</sub>-norm constraint.
 
 ## An application: black-box adversarial attacks
 
 As an example of application of ORD, consider black-box adversarial attacks.
 In these problems, the goal is to perturb the inputs of a given classifier to generate samples that lead to
 misclassification.
-In particular, the _maximum allowable l1-norm attack_ can be formulated as
+In particular, the _maximum allowable &ell;<sub>1</sub>-norm attack_ can be formulated as
 
 <img src="https://latex.codecogs.com/svg.image?\min&space;f(x_0&plus;x)&space;\\\text{s.t.&space;}&space;||x||_1&space;\le&space;\varepsilon">
 
