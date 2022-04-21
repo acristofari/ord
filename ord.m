@@ -351,7 +351,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                             mu_trial = mu;
                             expansion = true;
                             while (expansion)
-                                mu_trial = min(mu_trial/delta,1e0);    
+                                mu_trial = min(mu_trial/delta,1e0);
                                 f_trial = obj(x+mu_trial*d_x);
                                 n_f = n_f + 1;
                                 if (f_trial <= f - gamma*mu_trial*mu_trial)
