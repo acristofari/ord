@@ -517,9 +517,9 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             fprintf('%s\n','optimality condition satisfied with the desired tolerance');
         elseif (flag == 1)
             fprintf('%s\n','maximum number of function evaluations reached');
-        elseif flag == 2
+        elseif (flag == 2)
             fprintf('%s\n','maximum number of iterations reached');
-        elseif flag == 3
+        elseif (flag == 3)
             fprintf('%s\n','target objective value obtained');
         else
             fprintf('%s\n','maximum cpu time exceeded');
