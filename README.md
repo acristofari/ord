@@ -5,7 +5,8 @@ optimization problems of the following form:
 
 <img src="https://latex.codecogs.com/svg.image?\min&space;f(x)&space;\\\text{s.t.&space;}&space;&space;x&space;\in&space;\text{conv}&space;\{a_1,\ldots,a_m\}">
 
-where f(x) is a _black-box function_ and conv{a<sub>1</sub>,...,a<sub>m</sub>} is the convex hull of some given vectors a<sub>1</sub>,...,a<sub>m</sub>
+where f(x) is a _black-box function_  (assumed to be continuously differentiable)
+and conv{a<sub>1</sub>,...,a<sub>m</sub>} is the convex hull of some given vectors a<sub>1</sub>,...,a<sub>m</sub>
 called _atoms_.
 
 ORD uses an inner approximation approach that, at each iteration, approximately minimizes f(x)
