@@ -3,8 +3,8 @@
 % This file is part of ORD, which is a derivative-free solver for
 % optimization problems of the following form:
 %
-%                                 min f(x)
-%                            s.t. x in conv{a_1,...,a_m}
+%                             min f(x)
+%                        s.t. x in conv{a_1,...,a_m}
 %
 % where f(x) is a black-box function (assumed to be continuously
 % differentiable) and conv{a_1,...,a_m} is the convex hull of some given
@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 21st, 2022
+% April 22nd, 2022
 %
 % Licensing:
 % This file is part of ORD.
