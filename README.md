@@ -83,7 +83,7 @@ In particular, the _maximum allowable &ell;<sub>1</sub>-norm attack_ can be form
 
 <img src="https://latex.codecogs.com/svg.image?\min&space;f(x_0&plus;x)&space;\\\text{s.t.&space;}&space;||x||_1&space;\le&space;\varepsilon">
 
-where f is a suitably chosen attack loss function, x<sub>0</sub> is a vector representing a correctly classified sample,
+where f is an attack loss function, x<sub>0</sub> is a vector representing a correctly classified sample,
 ||x||<sub>1</sub> is the &ell;<sub>1</sub>-norm of x and &epsilon; is a positive parameter.
 Note that f is a black-box function when the internal configuration of the classifier is unknown.
 Since the feasible set can be expressed as the convex combination of the vertices of the &ell;<sub>1</sub>-ball,
