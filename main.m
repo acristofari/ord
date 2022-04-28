@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 22nd, 2022
+% April 28th, 2022
 %
 % Licensing:
 % This file is part of ORD.

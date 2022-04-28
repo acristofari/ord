@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 22nd, 2022
+% April 28th, 2022
 %
 % Licensing:
 % This file is part of ORD.
@@ -62,11 +62,11 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
     if (~isa(obj,'function_handle'))
         error('The first input must be a function handle.');
     end
-    if (~isnumeric(A) || ~isreal(A) || ~ismatrix(A))
+    if (~isnumeric(A) || ~isreal(A) || ~ismatrix(A) || any(any(isnan(A))))
         error('The second input must be a real matrix.');
     end
     n_atoms = size(A,2);
-    if (~isnumeric(i0) || ~isreal(i0) || ~isscalar(i0) || i0~=round(i0) || i0<1 || i0>n_atoms)
+    if (~isnumeric(i0) || ~isreal(i0) || ~isscalar(i0) || isnan(i0) || i0~=round(i0) || i0<1 || i0>n_atoms)
         error(['The third input must be an integer between 1 and ' num2str(n_atoms) '.']);
     end
 	
@@ -124,7 +124,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                     end
                     ind_y_A = floor(ind_y_A);
                 case 'use_simplex_grad'
-                    use_simplex_grad = opts.use_model;
+                    use_simplex_grad = opts.use_simplex_grad;
                     if (~islogical(use_simplex_grad) && (~isscalar(use_simplex_grad) || use_simplex_grad<=1))
                        error('In the options, ''use_simplex_grad'' must be either a logical or a number greater than 1.');
                     end
@@ -438,7 +438,8 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
         
         if (n_atoms_in>1 && any(y<=0e0))
             
-            if ((islogical(use_simplex_grad) && use_simplex_grad) || (isnumeric(use_simplex_grad) && (use_simplex_grad>=n_atoms_in+1)))
+            if ((islogical(use_simplex_grad) && use_simplex_grad) || ...
+                (isnumeric(use_simplex_grad) && (use_simplex_grad>=n_atoms_in+1)))
                 
                 % compute the simplex gradient for the restriced problem
                 % as the least-squares solution g of the linear system M*g = b

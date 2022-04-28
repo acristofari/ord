@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 22nd, 2022
+% April 28th, 2022
 %
 % Licensing:
 % This file is part of ORD.
@@ -78,10 +78,10 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     if (~isa(obj,'function_handle'))
         error('The first input must be a function handle.');
     end
-    if (~isnumeric(A) || ~isreal(A) || ~ismatrix(A))
+    if (~isnumeric(A) || ~isreal(A) || ~ismatrix(A) || any(any(isnan(A))))
         error('The second input must be a real matrix.');
     end
-    if (~isnumeric(y) || ~isreal(y) || ~iscolumn(y))
+    if (~isnumeric(y) || ~isreal(y) || ~iscolumn(y) || any(isnan(y)))
         error('The third input must be a real column vector.');
     end
     
