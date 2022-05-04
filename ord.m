@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% April 28th, 2022
+% May 4th, 2022
 %
 % Licensing:
 % This file is part of ORD.
@@ -119,7 +119,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                     if (~isvector(ind_y_A) || ~isnumeric(ind_y_A) || ~isreal(ind_y_A) || any(ind_y_A<1) || any(ind_y_A>n_atoms))
                        error(['In the options, ''set_initial_atoms'' must be a vector of numbers between 1 and ' num2str(n_atoms) '.']);
                     end
-                    if (~iscolumn(ind_y_A))
+                    if (iscolumn(ind_y_A))
                         ind_y_A = ind_y_A';
                     end
                     ind_y_A = floor(ind_y_A);
@@ -143,7 +143,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
             error('In the options, the length of ''set_initial_atoms'' must be equal to ''n_initial_atoms''.');
         end
         if (length(unique(ind_y_A)) ~= n_atoms_in)
-            error('In the options, ''set_initial_atoms'' must not contain duplicates.');
+            error('In the options, ''set_initial_atoms'' cannnot contain duplicates.');
         end
         if (~(any(ind_y_A==i0)))
             error('In the options, ''set_initial_atoms'' must contain ''i0''.');
