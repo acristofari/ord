@@ -1,94 +1,209 @@
-# Structured Derivative-Free Optimization &amp; Black-Box Adversarial Attacks
+# Community detection in undirected graphs
 
-_Optimize, Refine &amp; Drop_ (ORD) is a derivative-free solver for
-optimization problems of the following form:
-
-<img src="https://latex.codecogs.com/svg.image?\min&space;f(x)&space;\\\text{s.t.&space;}&space;&space;x&space;\in&space;\text{conv}&space;\{a_1,\ldots,a_m\}">
-
-where f(x) is a _black-box function_  (assumed to be continuously differentiable)
-and conv{a<sub>1</sub>, ..., a<sub>m</sub>} is the convex hull of some given vectors a<sub>1</sub>, ..., a<sub>m</sub>
-called _atoms_.
-
-ORD uses an inner approximation approach that, at each iteration, approximately minimizes f(x)
-by the DF-SIMPLEX algorithm, with a growing precision, over the convex hull of a suitably chosen subset of atoms,
-using proper rules to add and remove atoms.
-
-ORD can also be used for _black-box adversarial attacks_ (see below).
+*Fast Active-SeT based Approximate Total Variation Optimization* (FAST-ATVO) is a solver for community detection problems in undirected graphs
+with non-negative weights, using a non-linear optimization approach.
 
 ## Reference paper
 
-[A. Cristofari, F. Rinaldi (2021). _A Derivative-Free Method for Structured Optimization Problems._
-SIAM Journal on Optimization, 31(2), 1079-1107](https://epubs.siam.org/doi/abs/10.1137/20M1337417).
+[A. Cristofari, F. Rinaldi, F. Tudisco (2020). _Total Variation Based
+Community Detection Using a Nonlinear Optimization Approach_. SIAM Journal
+on Applied Mathematics, 80(3), 1392-1419](https://epubs.siam.org/doi/10.1137/19M1270446).
 
 ## Authors
 
 * Andrea Cristofari (e-mail: [andrea.cristofari@unipd.it](mailto:andrea.cristofari@unipd.it))
 * Francesco Rinaldi (e-mail: [rinaldi@math.unipd.it](mailto:rinaldi@math.unipd.it))
+* Francesco Tudisco (e-mail: [francesco.tudisco@gssi.it](mailto:francesco.tudisco@gssi.it))
 
 ## Licensing
 
-ORD is free software: you can redistribute it and/or modify
+FAST-ATVO is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-ORD is distributed in the hope that it will be useful,
+FAST-ATVO is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
-along with ORD. If not, see <http://www.gnu.org/licenses/>.
+along with FAST-ATVO. If not, see <http://www.gnu.org/licenses/>.
 
-Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
+Copyright 2019-2022 Andrea Cristofari, Francesco Rinaldi, Francesco
+Tudisco.
 
-## How to use ORD
+## How to use FAST-ATVO
 
 1. This directory should contain the following files:
 
     * `COPYING.txt`,
-    * `df_simplex.m`,
-    * `main.m`,
-    * `ord.m`,
+    * `ExampleGraph.txt`,
+    * `ExampleX0.txt`,
+    * `fast_atvo.cpp`,
+    * `fast_atvo.h`,
+    * `graph.h`,
+    * `main.cpp`,
     * `README.md`,
-    * `usage_df_simplex.txt`,
-    * `usage_ord.txt`.
 
-2. See the file `usage_ord.txt` to know how to call ORD in Matlab, change
-   algorithm parameters and get output values.
+    plus a subdirectory named `matlab`, which should contain the following
+    files:
 
-3. See the file `main.m` for an example.
-   To run the example, just call `main.m` in Matlab.
+    * `example_graph.mat`,
+    * `fast_atvo_matlab.cpp`,
+    * `main.m`,
+    * `make.m`,
+    * `usage.txt`.
 
-   File `main.m` also contains an example of how to call DF-SIMPLEX as standalone, see below.
+2. You can call FAST-ATVO either from the command prompt (see 2a) or from Matlab (see 2b).
 
-## When using ORD and when using DF-SIMPLEX
+   2a. **How to call FAST-ATVO from the command prompt**
 
-DF-SIMPLEX is the algorithm used at each iteration of ORD to solve the reduced problems,
-employing sparse directions that contain positive generators of the tangent cone at the current iterate
-and a specific line search.
-So, DF-SIMPLEX can even be used as standalone to solve the same class of problems as ORD.
-To call DF-SIMPLEX as standalone, see the file `usage_df_simplex.txt` and the example in the file `main.m`.
+      - Prepare a text file with the weight matrix expressed as a square
+        upper triangular matrix. Each line of the text file must have the
+        following form:
 
-Since ORD and DF-SIMPLEX follow different approaches, in general terms we can say that
-ORD is preferable when the optimal solutions can be expressed as the convex combination
-of just a few atoms. For example, this is the case when the number of atoms is much larger than
-the number of variables, or when the problem has a a particular structure that induces sparsity,
-such as &ell;<sub>1</sub>-norm constraint.
+	   <img src="https://latex.codecogs.com/svg.image?i_1,&space;j_1&space;\,\,&space;w_1&space;\,\,\,\,\,\,&space;i_2,&space;j_2&space;\,\,&space;w_2&space;\,\,\,\,\,\,&space;i_3,&space;j_3&space;\,\,&space;w_3&space;\,\,\,\,\,\,&space;\ldots">
 
-## An application: black-box adversarial attacks
+        where any tern (i<sub>h</sub>, j<sub>h</sub> w<sub>h</sub>) represents an edge between the nodes i<sub>h</sub>
+        and j<sub>h</sub> with non-negative weight w<sub>h</sub>.
 
-As an example of application of ORD, consider black-box adversarial attacks.
-In these problems, the goal is to perturb the inputs of a given classifier to generate samples that lead to
-misclassification.
-In particular, the _maximum allowable &ell;<sub>1</sub>-norm attack_ can be formulated as
+        It must hold i<sub>1</sub> &le; i<sub>2</sub> &le; i<sub>3</sub> <= ..., i.e., the first nodes of the
+        terns must be written in a non-decreasing order.
 
-<img src="https://latex.codecogs.com/svg.image?\min&space;f(x_0&plus;x)&space;\\\text{s.t.&space;}&space;||x||_1&space;\le&space;\varepsilon">
+        Note that, since the weight matrix must be upper triangular, it must also hold that i<sub>1</sub> &le; j<sub>1</sub>, i<sub>2</sub> &le; j<sub>2</sub>, i<sub>3</sub> &le; j<sub>3</sub>, ....
 
-where f is an attack loss function, x<sub>0</sub> is a vector representing a correctly classified sample,
-||x||<sub>1</sub> is the &ell;<sub>1</sub>-norm of x and &epsilon; is a positive parameter.
-Note that f is a black-box function when the internal configuration of the classifier is unknown.
-Since the feasible set can be expressed as the convex combination of the vertices of the &ell;<sub>1</sub>-ball,
-ORD can be used to solve this class of problems.
+        Unspecified weights between two nodes are assumed to be zero (so that only positive weights must be specified).
 
-When considering image classification, usually there is an additional constraint of the form
-0 &le; x<sub>0</sub> + x &le; 1, which can be removed by applying a proper variable transformation.
-Further details can be found in the reference paper [(Cristofari, Rinaldi, 2021)](https://epubs.siam.org/doi/abs/10.1137/20M1337417) and in the references therein.
+        For instance, consider the following weight matrix:
+
+        <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}0&space;&&space;0.9&space;&&space;1.5&space;&&space;2&space;&&space;0&space;\\0.9&space;&&space;0&space;&&space;0&space;&&space;0&space;&&space;0&space;\\1.5&space;&&space;0&space;&&space;0&space;&&space;0.8&space;&&space;1.1&space;\\2&space;&&space;0&space;&&space;0.8&space;&&space;0&space;&&space;0.3&space;\\0&space;&&space;0&space;&&space;1.1&space;&&space;0.3&space;&&space;0\end{bmatrix}">
+
+        A valid text file will be:
+
+            1,2 0.9 1,3 1.5 1,4 2
+            3,4 0.8 3,5 1.1
+            4,5 0.3
+
+        Equivalently, lines can even be broken or joined together. This means that
+        also a text file of the following form will be valid:
+
+            1,2 0.9 1,3 1.5 1,4 2 3,4 0.8
+            3,5 1.1 4,5 0.3
+
+      - Prepare a text file with the starting point of the algorithm.
+        Each line of the text file must contain scalars separated by blank spaces
+        (one value per line is also allowed).
+
+        The starting point must be a vector of length equal to the number of nodes.
+
+        For instance, consider the following starting point:
+
+	   <img src="https://latex.codecogs.com/svg.image?\begin{bmatrix}0&space;\\1&space;\\-0.3&space;\\0&space;\\0.2\end{bmatrix}">
+
+        A valid text file will be:
+
+            0
+            1
+            -0.3
+            0
+            0.2
+
+        Equivalently, lines can even be broken or joined together. This means that
+        also a text file of the following form will be valid:
+
+            0 1 -0.3
+            0 0.2
+
+      - Compile the files `fast_atvo.cpp` and `main.cpp`, then create the
+        executable `fast_atvo`. To run FAST-ATVO, you have to type in the
+        command prompt
+
+            fast_atvo GraphFile X0File [options]
+
+        where `GraphFile` is the name of the file with the weight matrix,
+        `X0File` is the name of the file with the starting point of the
+        algorithm and `[options]` are optional input arguments that allow
+        the user to modify some algorithm parameters and to print the
+        final results to files.
+        In particular, `[options]` must have the following form:
+
+            -c string
+               It is the name of the file where the communities found by
+               FAST-ATVO are printed as a 0-1 vector (if the file does not
+               exist, then it will be created, whereas existing files with
+               the same name will be overwritten).
+               If not specified, by default no file is created.
+            -m string
+               It is the name of the file where the modularity value of the
+               communities found by FAST-ATVO is printed (if the file does not
+               exist, then it will be created, whereas existing files with the
+               same name will be overwritten).
+               If not specified, by default no file is created.
+            -s string
+               It is the name of the file where the solution found by the
+               optimization algorithm is printed (if the file does not exist,
+               then it will be created, whereas existing files with the same
+               name will be overwritten).
+               If not specified, by default no file is created.
+            -p number greater than 1
+               It is the exponent parameter of the objective function.
+               If not specified, by default it is equal to 1.4.
+            -w number greater than or equal to 1
+               It is the maximum size of the working set in the optimization
+               algorithm.
+               If not specified, by default it is equal to
+               max(10,min(1000,0.03*n)), where 'n' is the number of
+               non-isolated nodes.
+            -i number greater than or equal to 1
+               It is the number of outer iterations for the globalization
+               strategy.
+               If not specified, by default it is equal to 1, i.e., the
+               globalization strategy is not activated.
+            -l number less than 0
+               It is the lower bound on the variables for the optimization
+               problem.
+               If not specified, by default it is equal to -1.
+            -u number greater than 0
+               It is the upper bound on the variables for the optimization
+               problem.
+               If not specified, by default it is equal to 1.
+            -r number between 0 and 1
+               It is the percentage of negative and positive variables that
+               will be set to the lower and upper bound in x0, respectively.
+               If not specified, by default it is equal to 1, i.e., all
+               non-zero variables in x0 will be set to the bounds.
+            -v number between 0 and 2
+               It is the verbosity level, to print iteration details of the
+               optimization algorithm.
+               If not specified, by default it is equal to 0, i.e., there are
+               no prints.
+
+      - When the algorithm is terminated, final results can be found in the
+        files specified in the options (if any). Moreover, if verbosity was
+        activated, a file named `iteration_history.txt` is created, where
+        the iteration details of the optimization algorithm are reported.
+
+      - Here is an example.
+
+        Consider the two files `ExampleGraph.txt` and `ExampleX0.txt`
+        included in this folder. They contain a weight matrix and a starting point
+        of the algorithm, respectively, according to the above described format.
+        Create the executable `fast_atvo` by compiling the files `fast_atvo.cpp` and `main.cpp`,
+        then type
+
+            fast_atvo ExampleGraph.txt ExampleX0.txt -c ExampleC.txt
+
+        so that the communities found by FAST-ATVO will be printed to the
+        file `ExampleC.txt`.
+
+        Or, if you also wish to print synthetic iteration details of the
+        optimization algorithm, you may type
+
+            fast_atvo ExampleGraph.txt ExampleX0.txt -c ExampleC.txt -v 1 
+
+   2b. **How to call FAST-ATVO from Matlab**
+
+      - Move to the subdirectory `matlab` and run `make.m` to build the MEX file.
+
+      - See the file `usage.txt` to know how to call FAST-ATVO from Matlab, change algorithm parameters and get output values.
+
+      - See the file `main.m` for an example. To run the example, just call `main.m` in Matlab.
