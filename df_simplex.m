@@ -343,7 +343,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 end
             end
             
-            if (linesearch_i)
+            if linesearch_i
                 d_x = A(:,h1) - A(:,h2);
                 norm_d_x = norm(d_x);
                 if (norm_d_x > 0e0)
