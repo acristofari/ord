@@ -477,7 +477,6 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                     skip_d([2*i-1 2*i]) = true;
                 else
                     alpha_vec(i) = eps_opt;
-                    skip_d(2*i-which_dir_i) = true;
                 end
             end
             
