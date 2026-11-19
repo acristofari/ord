@@ -1,7 +1,6 @@
 In this file, it is explained how to call DF-SIMPLEX in Matlab.
 -------------------------------------------------------------------------
 
-
 Usage.
 -------------------------------------------------------------------------
 X = df_simplex(OBJ,A,Y0)
@@ -15,7 +14,6 @@ polling samples collected by DF-SIMPLEX to ORD, but it can be ignored if
 DF-SIMPLEX is called as standalone.
 -------------------------------------------------------------------------
 
-
 Input arguments.
 -------------------------------------------------------------------------
 - OBJ (required) is the objective function, passed as a function handle;
@@ -28,7 +26,6 @@ Input arguments.
                 avoid unwanted breaks due to numerical issues);
 - OPTS (optional) is a structure with algorithm options (see below).
 -------------------------------------------------------------------------
-
 
 Output arguments.
 -------------------------------------------------------------------------
@@ -45,7 +42,6 @@ Output arguments.
            2 if the maximum number of iterations is reached,
            3 if the target objective value is obtained.
 -------------------------------------------------------------------------
-
 
 Options.
 -------------------------------------------------------------------------

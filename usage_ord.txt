@@ -1,7 +1,6 @@
 In this file, it is explained how to call ORD in Matlab.
 -------------------------------------------------------------------------
 
-
 Usage.
 -------------------------------------------------------------------------
 X = ord(OBJ,A,I0)
@@ -10,7 +9,6 @@ X = ord(OBJ,A,I0,OPTS)
 [X,F,ORD_INFO] = ord(__)
 [X,F,ORD_INFO] = ord(__)
 -------------------------------------------------------------------------
-
 
 Input arguments.
 -------------------------------------------------------------------------
@@ -21,7 +19,6 @@ Input arguments.
                 starting point;
 - OPTS (optional) is a structure with algorithm options (see below).
 -------------------------------------------------------------------------
-
 
 Output arguments.
 -------------------------------------------------------------------------
@@ -38,7 +35,6 @@ Output arguments.
            2 if the maximum number of iterations is reached,
            3 if the target objective value is obtained.
 -------------------------------------------------------------------------
-
 
 Options.
 -------------------------------------------------------------------------
