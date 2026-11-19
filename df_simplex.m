@@ -244,7 +244,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             compute_j = true;
         end
         
-        if (compute_j)
+        if compute_j
                        
             alpha_vec(j) = min(alpha_vec);
             
@@ -269,9 +269,11 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             ind = randperm(n); % shuffle variables
             
             % select a new index j
-            [~, j_max] = max(y);
+            [~,j_max] = max(y);
             if (y(j) < tau*y(j_max))
                 j = j_max;
+            else
+                skip_d = false(2*n,1);
             end
             compute_j = false;
             
