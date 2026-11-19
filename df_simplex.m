@@ -481,9 +481,8 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 end
             end
             
-        elseif (alpha_vec(i)> eps_opt)
-            alpha_vec(i) = max(theta*alpha_vec(i),eps_opt);
-            skip_d([2*i 2*i-1]) = true;           
+        else
+            alpha_vec(i) = max(theta*alpha_vec(i),eps_opt);          
         end
         
     end
