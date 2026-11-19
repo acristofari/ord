@@ -375,9 +375,6 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                     b_sampling(ind_i_sampling) = f_trial - f;
                     alpha_sampling(ind_i_sampling) = alpha_trial;
                     ind_sampling(ind_i_sampling) = true;
-                    if (theta*alpha_vec(i) <= eps_opt)
-                        skip_d(ind_i_sampling) = true;
-                    end
                     if (first_linesarch_i && n_f<max_n_f)
                         h3 = h1;
                         h1 = h2;
@@ -472,20 +469,21 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 end
                 skip_d = false(2*n,1);
                 skip_d(2*i-(~which_dir_i)) = true;
-            elseif (alpha_vec(i) > eps_opt)
-                alpha_vec(i) = max(theta*alpha_vec(i),eps_opt);
-                skip_d(2*i-1) = false;
-                skip_d(2*i) = false;
+            else
+                if (theta*alpha_vec(i) > eps_opt)
+                    alpha_vec(i) = theta*alpha_vec(i);
+                    skip_d([2*i-1 2*i]) = true;
+                elseif (alpha_vec(i) <= eps_opt)
+                    skip_d([2*i-1 2*i]) = true;
+                else
+                    alpha_vec(i) = eps_opt;
+                    skip_d(2*i-which_dir_i) = true;
+                end
             end
             
-        else
-            
-            if (alpha_vec(i)> eps_opt)
-                alpha_vec(i) = max(theta*alpha_vec(i),eps_opt);
-                skip_d(2*i) = false;
-                skip_d(2*i-1) = false;
-            end
-            
+        elseif (alpha_vec(i)> eps_opt)
+            alpha_vec(i) = max(theta*alpha_vec(i),eps_opt);
+            skip_d([2*i 2*i-1]) = true;           
         end
         
     end
