@@ -20,11 +20,11 @@
 % -------------------------------------------------------------------------
 %
 % Authors:
-% Andrea Cristofari (e-mail: andrea.cristofari@unipd.it)
+% Andrea Cristofari (e-mail: andrea.cristofari@uniroma2.it)
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% May 4th, 2022
+% November 19, 2026
 %
 % Licensing:
 % This file is part of ORD.
@@ -39,7 +39,7 @@
 % You should have received a copy of the GNU General Public License
 % along with ORD. If not, see <http://www.gnu.org/licenses/>.
 %
-% Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
+% Copyright 2021-2026 Andrea Cristofari, Francesco Rinaldi.
 %
 % -------------------------------------------------------------------------
 
@@ -47,10 +47,10 @@
 function [x,f,ord_info] = ord(obj,A,i0,opts)
     
     if (nargin < 3)
-        error('At least four inputs are required.');
+        error('At least three inputs are required.');
     end
     if (nargin > 4)
-        error('At most five inputs are required.');
+        error('At most four inputs are required.');
     end
     if (nargout < 1)
         error('At least one inputs is required.');
@@ -93,7 +93,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                     end
                 case 'max_n_f'
                     max_n_f = opts.max_n_f;
-                    if (~isnumeric(max_n_f) || ~isreal(max_n_f) || ~isscalar(max_n_f) || max_n_f<=1e0)
+                    if (~isnumeric(max_n_f) || ~isreal(max_n_f) || ~isscalar(max_n_f) || max_n_f<1e0)
                        error('In the options, ''max_n_f'' must be a number greater than or equal to 1.');
                     end
                     max_n_f = floor(max_n_f);
@@ -125,8 +125,9 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                     ind_y_A = floor(ind_y_A);
                 case 'use_simplex_grad'
                     use_simplex_grad = opts.use_simplex_grad;
-                    if (~islogical(use_simplex_grad) && (~isscalar(use_simplex_grad) || use_simplex_grad<=1))
-                       error('In the options, ''use_simplex_grad'' must be either a logical or a number greater than 1.');
+                    if ~((isscalar(use_simplex_grad) && ...
+                        (islogical(use_simplex_grad) || (isnumeric(use_simplex_grad) && isreal(use_simplex_grad) && (use_simplex_grad>1)))))
+                        error('In the options, ''use_simplex_grad'' must be either a logical scalar or a real scalar number greater than 1.');
                     end
                 case 'verbosity'
                     verbosity = opts.verbosity;
@@ -138,7 +139,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
             end
         end
     end
-    if (~isempty(ind_y_A))
+    if ~isempty(ind_y_A)
         if (length(ind_y_A)~=n_atoms_in)
             error('In the options, the length of ''set_initial_atoms'' must be equal to ''n_initial_atoms''.');
         end
@@ -165,7 +166,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
     % - ind_y_A is a vector with the indices of the atoms corresponding to each entry of y
     %   (i.e., y(i) refers to the atom stored in the ind_y_A(i)-th column of A)
     
-    if (isempty(ind_y_A))
+    if isempty(ind_y_A)
         ind_y_A = [0 randperm(n_atoms-1)];
         ind_y_A(ind_y_A==i0) = n_atoms;
         ind_y_A(1) = i0;
@@ -180,7 +181,8 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
     y = zeros(n_atoms_in,1);
     y(1) = 1e0;
     
-    f = obj(A_k*y);
+    x = A_k*y;
+    f = obj(x);
     n_f = 1;
 
     it = 0;
@@ -197,7 +199,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
     theta = 5e-1; % stepsize reduction factor
     delta = 5e-1; % reciprocal of the stepsize expansion factor
     
-    if (verbosity)
+    if verbosity
         fprintf('ORD starts\n')
         fprintf('------------------------------------------------------------------------------------\n');
         fprintf('%s%s\n%s%1s\n',blanks(48),'|    local minimization details',blanks(48),'|');
@@ -207,9 +209,12 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
     end
     
     if (f <= min_f)
+        y_temp = y;
+        y = zeros(n_atoms,1);
+        y(ind_y_A) = y_temp;
         x = A(:,i0);
         flag = 3;
-        if (verbosity)
+        if verbosity
             fprintf('%s\n','target objective value obtained');
         end
         ord_info.y = y;
@@ -218,32 +223,8 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
         ord_info.flag = flag;
         return;
     end
-    if (max_n_f <= 0e0)
-        x = A(:,i0);
-        flag = 1;
-        if (verbosity)
-            fprintf('%s\n','maximum number of function evaluations reached');
-        end
-        ord_info.y = y;
-        ord_info.n_f = n_f;
-        ord_info.it = it;
-        ord_info.flag = flag;
-        return;
-    end
-    if (max_it <= 0e0)
-        x = A(:,i0);
-        flag = 2;
-        if (verbosity)
-            fprintf('%s\n','maximum number of iterations reached');
-        end
-        ord_info.y = y;
-        ord_info.n_f = n_f;
-        ord_info.it = it;
-        ord_info.flag = flag;
-        return;
-    end
     
-    while (true)
+    while true
         
         %==================================================================
         % OPTIMIZE PHASE
@@ -306,6 +287,8 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
            flag_local = -1;
            if (it>0 && flag_local<=5e-1 && mu_hat<=eps_opt_local)
                eps_opt_local = max(25e-2*eps_opt_local,eps_opt);
+           elseif (it == 0)
+               eps_opt_local = eps_opt;
            else
                eps_opt_local = max(75e-2*eps_opt_local,eps_opt);
            end
@@ -344,17 +327,30 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                     max_norm_d_x = max(max_norm_d_x,norm(d_x));
                     f_trial = obj(x+mu_hat*d_x);
                     n_f = n_f + 1;
-                    if (f_trial <= f - gamma*mu_hat*mu_hat)
+                    if (f_trial <= min_f)
+                        f = f_trial;
+                        y = full(sparse([ind_y_A atom_to_add_k],1,[(1e0-mu_hat)*y;mu_hat],n_atoms,1,n_atoms));
+                        x = A*y;
+                        sol_found_sampling = true;
+                        flag = 3;
+                    elseif (f_trial <= f - gamma*mu_hat*mu_hat)
                         mu = mu_hat;
                         f_next = f_trial;
                         if (n_f < max_n_f)
                             mu_trial = mu;
                             expansion = true;
-                            while (expansion)
+                            while (expansion && (n_f<max_n_f))
                                 mu_trial = min(mu_trial/delta,1e0);
                                 f_trial = obj(x+mu_trial*d_x);
                                 n_f = n_f + 1;
-                                if (f_trial <= f - gamma*mu_trial*mu_trial)
+                                if (f_trial <= min_f)
+                                    f = f_trial;
+                                    y = full(sparse([ind_y_A atom_to_add_k],1,[(1e0-mu_trial)*y;mu_trial],n_atoms,1,n_atoms));
+                                    x = A*y;
+                                    sol_found_sampling = true;
+                                    flag = 3;
+                                    break;
+                                elseif (f_trial <= f - gamma*mu_trial*mu_trial)
                                     mu = mu_trial;
                                     f_next = f_trial;
                                     expansion = (mu_trial < 1e0);
@@ -397,7 +393,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                 break;
             end
             
-            if (~v_added)
+            if ~v_added
                 if (mu_hat*max_norm_d_x<=eps_opt && eps_opt_local<=eps_opt && flag_local<=5e-1)
                     flag = 0;
                     break;
@@ -412,11 +408,12 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
         end
         
         if (n_f>=max_n_f ||it >= max_it || (v_added && f_next<=min_f))
-            if (v_added)
+            if v_added
                 n_atoms_in = n_atoms_in + 1;
                 ind_y_A(n_atoms_in) = atom_to_add_k;
                 y = (1e0-mu)*y;
                 y(n_atoms_in,1) = mu;
+                x = A(:,ind_y_A)*y;
                 f = f_next;
             end
             if (f <= min_f)
@@ -518,7 +515,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                     ind_atoms_to_remove = find(y<=0e0);
                 else
                     % the maximum number of function evaluations is reached
-                    if (v_added)
+                    if v_added
                         x = A_k*y;
                     end
                     flag = 1;
@@ -533,7 +530,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
         end
         
         % add atoms
-        if (v_added)
+        if v_added
             atoms_in(atom_to_add_k) = true;
             n_atoms_in = n_atoms_in + 1;
             A_k(:,n_atoms_in) = A(:,atom_to_add_k);
@@ -559,14 +556,14 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
         %==================================================================
                 
         % iteration prints
-        if (verbosity)
+        if verbosity
             fprintf('%6i  %11.4e  %6i  %5i  %10.4e  |  %6i  %6i  %10.4e  %3i\n',it,f,n_f,n_atoms_in,mu,inner_it,inner_n_f,eps_opt_local,flag_local);
         end
                 
     end
     
     % build x from y
-    if (~sol_found_sampling)
+    if ~sol_found_sampling
         if (f_sample_best < f)
             f = f_sample_best;
             y = y_sample_best;
@@ -579,7 +576,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
     end
     
     % final iteration prints
-    if (verbosity)
+    if verbosity
         fprintf('%6i  %11.4e  %6i  %5i  %10.4e  |  %6i  %6i  %10.4e  %3i\n',it,f,n_f,n_atoms_in,mu,inner_it,inner_n_f,eps_opt_local,flag_local);
         if (flag == 0)
             fprintf('%s\n','optimality condition satisfied with the desired tolerance');

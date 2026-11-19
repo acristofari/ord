@@ -1,15 +1,7 @@
 % -------------------------------------------------------------------------
-%
-% This file is part of ORD, which is a derivative-free solver for
-% optimization problems of the following form:
-%
-%                             min f(x)
-%                        s.t. x in conv{a_1,...,a_m}
-%
-% where f(x) is a black-box function (assumed to be continuously
-% differentiable) and conv{a_1,...,a_m} is the convex hull of some given
-% vectors a_1,...,a_m, called atoms.
-%
+% 
+% This is the main file to run ORD and DF-SIMPLEX.
+% 
 % -------------------------------------------------------------------------
 %
 % Reference paper:
@@ -20,27 +12,12 @@
 % -------------------------------------------------------------------------
 %
 % Authors:
-% Andrea Cristofari (e-mail: andrea.cristofari@unipd.it)
+% Andrea Cristofari (e-mail: andrea.cristofari@uniroma2.it)
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% May 4th, 2022
-%
-% Licensing:
-% This file is part of ORD.
-% ORD is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-% ORD is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-% GNU General Public License for more details.
-% You should have received a copy of the GNU General Public License
-% along with ORD. If not, see <http://www.gnu.org/licenses/>.
-%
-% Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
-%
+% November 19, 2026
+% 
 % -------------------------------------------------------------------------
 
 clear all, clc;

@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% May 4th, 2022
+% November 19, 2026
 %
 % Licensing:
 % This file is part of ORD.
@@ -39,7 +39,7 @@
 % You should have received a copy of the GNU General Public License
 % along with ORD. If not, see <http://www.gnu.org/licenses/>.
 %
-% Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
+% Copyright 2021-2026 Andrea Cristofari, Francesco Rinaldi.
 %
 % -------------------------------------------------------------------------
 
@@ -63,10 +63,10 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     %   sampling.alpha is the vector [alpha_1  ...  alpha_r]',
     
     if (nargin < 3)
-        error('At least four inputs are required.');
+        error('At least three inputs are required.');
     end
     if (nargin > 4)
-        error('At most five inputs are required.');
+        error('At most four inputs are required.');
     end
     if (nargout < 1)
         error('At least one inputs is required.');
@@ -164,7 +164,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         n_f = 0;
     end
     
-    if (verbosity)
+    if verbosity
         fprintf('DF-SIMPLEX starts\n')
         fprintf('%s%i%s%.4e\n','it = ',0,', f = ',f);
     end
@@ -193,7 +193,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         sampling.alpha = [];
         sampling.j = j;
         flag = 3;
-        if (verbosity)
+        if verbosity
             fprintf('%s\n','target objective value obtained');
         end
         df_simplex_info.y = y;
@@ -209,7 +209,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         sampling.alpha = [];
         sampling.j = j;
         flag = 1;
-        if (verbosity)
+        if verbosity
             fprintf('%s\n','maximum number of function evaluations reached');
         end
         df_simplex_info.y = y;
@@ -225,8 +225,24 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         sampling.alpha = [];
         sampling.j = j;
         flag = 2;
-        if (verbosity)
+        if verbosity
             fprintf('%s\n','maximum number of iterations reached');
+        end
+        df_simplex_info.y = y;
+        df_simplex_info.n_f = n_f;
+        df_simplex_info.it = it;
+        df_simplex_info.flag = flag;
+        return;
+    end
+    if (n <= 1)
+        it = 0;
+        sampling.b = b_sampling(ind_sampling);
+        sampling.v_d = [];
+        sampling.alpha = [];
+        sampling.j = j;
+        flag = 0;
+        if verbosity
+            fprintf('%s\n','problem has less than two variables');
         end
         df_simplex_info.y = y;
         df_simplex_info.n_f = n_f;
@@ -276,7 +292,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 break;
             end
                         
-            if (verbosity)
+            if verbosity
                 fprintf('%s%i%s%.4e%s%i%s%.4e\n','it = ',it,', f = ',f,', n_f = ',n_f,', alpha_max = ',alpha_max);
             end
             
@@ -310,7 +326,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             expansion_i = false;
             
             if (y(i) == 0e0)
-                if (~skip_d(2*i-1))
+                if ~skip_d(2*i-1)
                     h1 = i;
                     h2 = j;
                     which_dir_i = true; % d = e_i - e_j
@@ -319,7 +335,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                     linesearch_i = false;
                 end
             elseif (y(j) == 0e0)
-                if (~skip_d(2*i))
+                if ~skip_d(2*i)
                     h1 = j;
                     h2 = i;
                     which_dir_i = false; % d = e_j - e_i
@@ -329,7 +345,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 end
             else % randomly choose the first direction to use
                 if (rand < 5e-1)
-                    if (~skip_d(2*i-1))
+                    if ~skip_d(2*i-1)
                         h1 = i;
                         h2 = j;
                         which_dir_i = true; % d = e_i - e_j
@@ -343,12 +359,12 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                         linesearch_i = false;
                     end
                 else
-                    if (~skip_d(2*i))
+                    if ~skip_d(2*i)
                         h1 = j;
                         h2 = i;
                         which_dir_i = false; % d = e_j - e_i
                         first_linesarch_i = true;
-                    elseif (~skip_d(2*i-1))
+                    elseif ~skip_d(2*i-1)
                         h1 = i;
                         h2 = j;
                         which_dir_i = true; % d = e_i - e_j
@@ -382,6 +398,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 f_trial = obj(x_trial);
                 n_f = n_f + 1;
                 if (f_trial <= f-gamma*alpha_trial*alpha_trial)
+                    ind_sampling(ind_i_sampling) = false;
                     expansion_i = true;
                     linesearch_i = false;
                 else
@@ -410,7 +427,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             % we now produce a new point and we start a new collection
             % of samples that first includes the point where we come from
             % and the point not accepted in the expansion (if any)
-            if (expansion_i)
+            if expansion_i
                 allow_stop = false;
                 if (alpha_trial<alpha_max_feas_i && n_f<max_n_f && f_trial>min_f)
                     y_next = y_trial;
@@ -420,26 +437,27 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                     alpha_prev = alpha_trial;
                     first_expansion = true;
                     while (expansion_i && alpha_trial<alpha_max_feas_i && n_f<max_n_f)
+                        alpha_prev0 = alpha_trial;
                         alpha_trial = min(alpha_max_feas_i,alpha_trial/delta);
                         s_i = alpha_trial*d_i;
                         y_trial([h1;h2]) = [y(h1)+s_i;y(h2)-s_i];
                         x_trial = x + alpha_trial*d_x;
                         f_trial = obj(x_trial);
                         n_f = n_f + 1;
-                        if (f_trial <= f-gamma*alpha_trial*alpha_trial)
+                        if (f_trial <= min_f)
+                            f_prev = f_next;
+                            y_next = y_trial;
+                            x_next = x_trial;
+                            f_next = f_trial;
+                            alpha_prev = alpha_trial;
+                            expansion_i = false;
+                        elseif (f_trial <= f-gamma*alpha_trial*alpha_trial)
                             f_prev = f_next;
                             y_next = y_trial;
                             x_next = x_trial;
                             f_next = f_trial;
                             alpha_prev = alpha_trial;
                             first_expansion = false;
-                        elseif (f_trial <= min_f)
-                            expansion_i = false;
-                            y_next = y_trial;
-                            x_next = x_trial;
-                            f_next = f_trial;
-                            alpha_prev = alpha_trial;
-                            flag = 3;
                         else
                             expansion_i = false;
                             b_sampling(ind_i_sampling) = f_trial - f_next;
@@ -455,11 +473,11 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                             ind_sampling(2*i-(~which_dir_i)) = true;
                         end
                     end
-                    if (~ind_sampling(ind_i_sampling)) % if this occurs, it means that the stepsize has been expanded,
-                                                       % but the previous while loop ended because
-                                                       % alpha_trial=alpha_max_feas_i, or n_f=n_f_max, or f_trial<=min_f
+                    if ~ind_sampling(ind_i_sampling) % if this occurs, it means that the stepsize has been expanded,
+                                                     % but the previous while loop ended because
+                                                     % alpha_trial=alpha_max_feas_i, or n_f=n_f_max, or f_trial<=min_f
                         b_sampling(2*i-(~which_dir_i)) = f_prev - f_next;
-                        alpha_sampling(2*i-(~which_dir_i)) = (1e0-delta)*alpha_trial;
+                        alpha_sampling(2*i-(~which_dir_i)) = alpha_trial - alpha_prev0;
                         ind_sampling = false(2*n,1);
                         ind_sampling(2*i-(~which_dir_i)) = true;
                     end
@@ -484,12 +502,10 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 end
                 skip_d = false(2*n,1);
                 skip_d(2*i-(~which_dir_i)) = true;
-            else
-                if (alpha_vec(i)> eps_opt)
-                    alpha_vec(i) = max(theta*alpha_vec(i),eps_opt);
-                    skip_d(ind_sampling) = false;
-                    skip_d(2*i-(~which_dir_i)) = false;
-                end
+            elseif (alpha_vec(i) > eps_opt)
+                alpha_vec(i) = max(theta*alpha_vec(i),eps_opt);
+                skip_d(2*i-1) = false;
+                skip_d(2*i) = false;
             end
             
         else
@@ -511,7 +527,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     sampling.alpha = max(alpha_sampling(ind_sampling),0e0);
     sampling.j = j;
     
-    if (verbosity)
+    if verbosity
         fprintf('%s%i%s%.4e%s%i%s%.4e\n','it = ',it,', f = ',f,', n_f = ',n_f,', alpha_max = ',alpha_max);
         if (flag == 0)
             fprintf('%s\n','optimality condition satisfied with the desired tolerance');

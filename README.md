@@ -22,7 +22,7 @@ SIAM Journal on Optimization, 31(2), 1079-1107](https://epubs.siam.org/doi/abs/1
 
 ## Authors
 
-* Andrea Cristofari (e-mail: [andrea.cristofari@unipd.it](mailto:andrea.cristofari@unipd.it))
+* Andrea Cristofari (e-mail: [andrea.cristofari@uniroma2.it](mailto:andrea.cristofari@uniroma2.it))
 * Francesco Rinaldi (e-mail: [rinaldi@math.unipd.it](mailto:rinaldi@math.unipd.it))
 
 ## Licensing
@@ -38,7 +38,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ORD. If not, see <http://www.gnu.org/licenses/>.
 
-Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
+Copyright 2021-2026 Andrea Cristofari, Francesco Rinaldi.
 
 ## How to use ORD
 
@@ -56,7 +56,7 @@ Copyright 2021-2022 Andrea Cristofari, Francesco Rinaldi.
    algorithm parameters and get output values.
 
 3. See the file `main.m` for an example.
-   To run the example, just call `main.m` in Matlab.
+   To run the example, just lunch `main.m` in Matlab.
 
    File `main.m` also contains an example of how to call DF-SIMPLEX as standalone, see below.
 
