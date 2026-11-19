@@ -202,38 +202,6 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         df_simplex_info.flag = flag;
         return;
     end
-    if (max_n_f <= 0e0)
-        it = 0;
-        sampling.b = b_sampling(ind_sampling);
-        sampling.v_d = [];
-        sampling.alpha = [];
-        sampling.j = j;
-        flag = 1;
-        if verbosity
-            fprintf('%s\n','maximum number of function evaluations reached');
-        end
-        df_simplex_info.y = y;
-        df_simplex_info.n_f = n_f;
-        df_simplex_info.it = it;
-        df_simplex_info.flag = flag;
-        return;
-    end
-    if (max_it <= 0e0)
-        it = 0;
-        sampling.b = b_sampling(ind_sampling);
-        sampling.v_d = [];
-        sampling.alpha = [];
-        sampling.j = j;
-        flag = 2;
-        if verbosity
-            fprintf('%s\n','maximum number of iterations reached');
-        end
-        df_simplex_info.y = y;
-        df_simplex_info.n_f = n_f;
-        df_simplex_info.it = it;
-        df_simplex_info.flag = flag;
-        return;
-    end
     if (n <= 1)
         it = 0;
         sampling.b = b_sampling(ind_sampling);
