@@ -221,7 +221,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     
     it = 1;
     
-    while (true)
+    while true
         
         if (n_f >= max_n_f)
             flag = 1;
