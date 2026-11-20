@@ -107,15 +107,17 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                        error('In the options, ''eps_opt'' must be a non-negative number.');
                     end
                 case 'max_n_f'
-                    max_n_f = floor(opts.max_n_f);
+                    max_n_f = opts.max_n_f;
                     if (~isnumeric(max_n_f) || ~isreal(max_n_f) || ~isscalar(max_n_f) || max_n_f<1e0)
                        error('In the options, ''max_n_f'' must be a number greater than or equal to 1.');
                     end
+                    max_n_f = floor(max_n_f);
                 case 'max_it'
-                    max_it = floor(opts.max_it);
+                    max_it = opts.max_it;
                     if (~isscalar(max_it) || ~isnumeric(max_it) || ~isreal(max_it) || max_it<1e0)
                        error('In the options, ''max_it'' must be a number greater than or equal to 1.');
                     end
+                    max_it = floor(opts.max_it);
                 case 'min_f'
                     min_f = opts.min_f;
                     if (~isscalar(min_f) || ~isnumeric(min_f) || ~isreal(min_f))
@@ -148,9 +150,15 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     b_sampling = zeros(2*n,1);
     alpha_sampling = zeros(2*n,1);
     ind_sampling = false(2*n,1);
+
+    shuffle = true; % to shuffle or not the variables at the beginning of each outer iteration
+    normalize_d = true; % to normalize or not directions
     
-    ind = randperm(n); % shuffle variables
-    
+    if shuffle
+       ind = randperm(n);
+    else
+       ind = 1:n; 
+    end
     ind_i = 0;
     
     tau = 9e-1;
@@ -169,11 +177,13 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         fprintf('%s%i%s%.4e\n','it = ',0,', f = ',f);
     end
     
-    % search directions will be normalized
-    
     % line search parameters
     if ~is_alpha_ini_given
-        alpha_max = alpha_ini*max(vecnorm(A*(eye(n)-double(1:n==j)')));
+        if normalize_d
+            alpha_max = alpha_ini*max(vecnorm(A*(eye(n)-double(1:n==j)')));
+        else
+            alpha_max = alpha_ini
+        end
     else
         alpha_max = alpha_ini;
     end
@@ -231,11 +241,11 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
         % select index i
         if (ind_i < n)
             ind_i = ind_i + 1;
-            i = ind(ind_i);
+            i = idx(ind_i);
             if (i == j)
                 if (ind_i < n)
                     ind_i = ind_i + 1;
-                    i = ind(ind_i);
+                    i = idx(ind_i);
                 else
                     compute_j = true;
                 end
@@ -266,7 +276,11 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             
             it = it + 1;
             
-            ind = randperm(n); % shuffle variables
+            if shuffle
+               ind = randperm(n);
+            else
+               ind = 1:n; 
+            end
             
             % select a new index j
             [~,j_max] = max(y);
@@ -279,10 +293,10 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             
             % select index i
             ind_i = 1;
-            i = ind(ind_i);
+            i = idx(ind_i);
             if (i == j)
                 ind_i = ind_i + 1;
-                i = ind(ind_i);
+                i = idx(ind_i);
             end
             
             allow_stop = (alpha_max<=eps_opt);
@@ -319,8 +333,8 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                         h1 = i;
                         h2 = j;
                         which_dir_i = true; % d = e_i - e_j
-                        first_linesarch_i = true;
-                    elseif (~skip_d(2*i))
+                        first_linesarch_i = ~skip_d(2*i);
+                    elseif ~skip_d(2*i)
                         h1 = j;
                         h2 = i;
                         which_dir_i = false; % d = e_j - e_i
@@ -333,7 +347,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                         h1 = j;
                         h2 = i;
                         which_dir_i = false; % d = e_j - e_i
-                        first_linesarch_i = true;
+                        first_linesarch_i = ~skip_d(2*i-1);
                     elseif ~skip_d(2*i-1)
                         h1 = i;
                         h2 = j;
@@ -349,8 +363,10 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                 d_x = A(:,h1) - A(:,h2);
                 norm_d_x = norm(d_x);
                 if (norm_d_x > 0e0)
-                    d_i = 1e0/norm_d_x;
-                    d_x = d_x/norm_d_x;
+                    if normalize_d
+                        d_i = 1e0/norm_d_x;
+                        d_x = d_x/norm_d_x;
+                    end
                     ind_i_sampling = 2*i - which_dir_i;
                 else
                     linesearch_i = false;
@@ -359,7 +375,11 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
             
             % backtracking procedure
             while (linesearch_i && n_f<max_n_f)
-                alpha_max_feas_i = norm_d_x*y(h2);
+                if normalize_d
+                    alpha_max_feas_i = norm_d_x*y(h2);
+                else
+                    alpha_max_feas_i = y(h2);
+                end
                 alpha_trial = min(alpha_max_feas_i,alpha_vec(i));
                 s_i = alpha_trial*d_i;
                 y_trial = y;
@@ -430,7 +450,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                             b_sampling(ind_i_sampling) = f_trial - f_next;
                             b_sampling(2*i-(~which_dir_i)) = f_prev - f_next;
                             alpha_sampling(ind_i_sampling) = alpha_trial - alpha_prev;
-                            if (first_expansion)
+                            if first_expansion
                                 alpha_sampling(2*i-(~which_dir_i)) = alpha_prev;
                             else
                                 alpha_sampling(2*i-(~which_dir_i)) = (1e0-delta)*alpha_prev;
