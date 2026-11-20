@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% November 19, 2026
+% November 20, 2026
 %
 % Licensing:
 % This file is part of ORD.
@@ -119,7 +119,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
                     if (~isvector(ind_y_A) || ~isnumeric(ind_y_A) || ~isreal(ind_y_A) || any(ind_y_A<1) || any(ind_y_A>n_atoms))
                        error(['In the options, ''set_initial_atoms'' must be a vector of numbers between 1 and ' num2str(n_atoms) '.']);
                     end
-                    if (iscolumn(ind_y_A))
+                    if iscolumn(ind_y_A)
                         ind_y_A = ind_y_A';
                     end
                     ind_y_A = floor(ind_y_A);
@@ -295,7 +295,7 @@ function [x,f,ord_info] = ord(obj,A,i0,opts)
         end
         n_f = n_f + inner_n_f;
         it = it + 1;   
-                
+        
         if (flag_local == 3)
             mu = 0;
             flag = 3;

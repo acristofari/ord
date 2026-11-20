@@ -24,7 +24,7 @@
 % Francesco Rinaldi (e-mail: rinaldi@math.unipd.it)
 %
 % Last update of this file:
-% November 19, 2026
+% November 20, 2026
 %
 % Licensing:
 % This file is part of ORD.
@@ -157,7 +157,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     [~,j] = max(y);
     
     x = A*y;
-    if (isempty(f))
+    if isempty(f)
         f = obj(x);
         n_f = 1;
     else
