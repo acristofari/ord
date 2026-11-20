@@ -123,7 +123,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
                     end
                 case 'f0'
                     f = opts.f0;
-                    if (~isscalar(f) || ~isnumeric(f) || ~isreal(f))
+                    if (~isnumeric(f) || ~isreal(f) || ~isscalar(f))
                        error('In the options, ''f0'' must be a real number.');
                     end
                 case 'alpha_ini'
@@ -172,7 +172,7 @@ function [x,f,df_simplex_info,sampling] = df_simplex(obj,A,y,opts)
     % search directions will be normalized
     
     % line search parameters
-    if (~is_alpha_ini_given)
+    if ~is_alpha_ini_given
         alpha_max = alpha_ini*max(vecnorm(A*(eye(n)-double(1:n==j)')));
     else
         alpha_max = alpha_ini;
